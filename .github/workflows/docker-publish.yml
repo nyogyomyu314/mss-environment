@@ -1,0 +1,36 @@
+# ワークフローの名前
+name: Docker Image CI
+
+# ワークフローが実行されるタイミングを定義
+on:
+  # mainブランチにプッシュされた時に実行
+  push:
+    branches: [ "main" ]
+
+# 実行される一連のジョブを定義
+jobs:
+  build_and_push:
+    # ジョブを実行する仮想環境の種類を指定
+    runs-on: ubuntu-latest
+
+    # ジョブのステップを定義
+    steps:
+    # 1. リポジトリのコードをチェックアウトする
+    - name: Check out the repo
+      uses: actions/checkout@v4
+
+    # 2. Docker Hubにログインするための設定
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 3. Dockerイメージをビルドしてプッシュする
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/music-separation:latest 
+        # ↑↑↑ ここの 'music-separation' は、あなたの好きなリポジトリ名に変更可能です
