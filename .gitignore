@@ -73,8 +73,3 @@ Scripts/
 *.code-workspace
 
 wandb/
-
-results/
-separation_results/
-input/
-models/
